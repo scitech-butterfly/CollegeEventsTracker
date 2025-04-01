@@ -12,4 +12,7 @@ abstract class Community {
         this.events = new ArrayList<>();
         this.memberIds = new ArrayList<>();
     }
+    // Abstract method
+    public abstract String getCommunityType();
+    
   
