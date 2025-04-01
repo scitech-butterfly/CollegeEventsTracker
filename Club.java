@@ -6,3 +6,7 @@ class Club extends Community {
         super(communityId, name);
         this.category = category;
     }
+    @Override
+    public String getCommunityType() {
+        return "Club";
+    }
