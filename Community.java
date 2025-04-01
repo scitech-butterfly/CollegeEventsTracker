@@ -30,4 +30,8 @@ abstract class Community {
     public String getCommunityId() {
         return communityId;
     }
+    public String getName() {
+        return name;
+    }
+}
   
