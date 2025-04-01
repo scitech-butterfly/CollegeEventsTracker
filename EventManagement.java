@@ -31,3 +31,11 @@ class Event {
         this.membersOnly = membersOnly;
         this.attendees = new ArrayList<>();
     }
+// Getters 
+    public String getEventId() { return eventId; }
+    public String getName() { return name; }
+    public String getDate() { return date; }
+    public String getTime() { return time; }
+    public String getVenue() { return venue; }
+    public String getCommunityId() { return communityId; }
+    public boolean isMembersOnly() { return membersOnly; }
