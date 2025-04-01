@@ -6,3 +6,7 @@ class Department extends Community {
         super(communityId, name);
         this.facultyHead = facultyHead;
     }
+    @Override
+    public String getCommunityType() {
+        return "Department";
+    }
