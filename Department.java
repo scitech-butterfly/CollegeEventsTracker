@@ -10,3 +10,7 @@ class Department extends Community {
     public String getCommunityType() {
         return "Department";
     }
+    public String getFacultyHead() {
+        return facultyHead;
+    }
+}
