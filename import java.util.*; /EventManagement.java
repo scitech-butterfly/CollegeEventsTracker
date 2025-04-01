@@ -39,7 +39,7 @@ class Event {
     public String getCommunityId() { return communityId; }
     public boolean isMembersOnly() { return membersOnly; }
     
-    //Added attendee management methods in Event class
+    //attendee management methods in Event class
     public void addAttendee(String userId) {
         attendees.add(userId);
     }
@@ -47,4 +47,15 @@ class Event {
     public ArrayList<String> getAttendees() {
         return attendees;
     }
+    //Displaying 
+    public void displayEventDetails() {
+        System.out.println("Event: " + name);
+        System.out.println("Description: " + description);
+        System.out.println("Date: " + date + " at " + time);
+        System.out.println("Venue: " + venue);
+        System.out.println("Organized by: " + communityId);
+        System.out.println("Members only: " + (membersOnly ? "Yes" : "No"));
+        System.out.println("Attendees: " + attendees.size());
+    }
+}
 
