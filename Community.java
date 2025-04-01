@@ -27,4 +27,7 @@ abstract class Community {
     public ArrayList<Event> getEvents() {
         return events;
     }
+    public String getCommunityId() {
+        return communityId;
+    }
   
