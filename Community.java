@@ -15,4 +15,7 @@ abstract class Community {
     // Abstract method
     public abstract String getCommunityType();
     
+    public void addMember(String userId) {
+        memberIds.add(userId);
+    }
   
