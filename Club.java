@@ -10,3 +10,7 @@ class Club extends Community {
     public String getCommunityType() {
         return "Club";
     }
+    public String getCategory() {
+        return category;
+    }
+}
