@@ -18,4 +18,7 @@ abstract class Community {
     public void addMember(String userId) {
         memberIds.add(userId);
     }
+    public boolean isMember(String userId) {
+        return memberIds.contains(userId);
+    }
   
