@@ -21,4 +21,7 @@ abstract class Community {
     public boolean isMember(String userId) {
         return memberIds.contains(userId);
     }
+    public void addEvent(Event event) {
+        events.add(event);
+    }
   
