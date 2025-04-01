@@ -24,4 +24,7 @@ abstract class Community {
     public void addEvent(Event event) {
         events.add(event);
     }
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
   
