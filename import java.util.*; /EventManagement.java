@@ -38,3 +38,13 @@ class Event {
     public String getVenue() { return venue; }
     public String getCommunityId() { return communityId; }
     public boolean isMembersOnly() { return membersOnly; }
+    
+    //Added attendee management methods in Event class
+    public void addAttendee(String userId) {
+        attendees.add(userId);
+    }
+
+    public ArrayList<String> getAttendees() {
+        return attendees;
+    }
+
