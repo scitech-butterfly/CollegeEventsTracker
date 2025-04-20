@@ -11,3 +11,14 @@ public abstract class User {
         this.email = email;
         this.role = role;
     }
+
+    // Abstract method
+    public abstract boolean canAddEvents();
+
+    // Display user profile
+    public void displayProfile() {
+        System.out.println("User: " + name + " (" + email + ")");
+        System.out.println("Role: " + role);
+    }
+
+
