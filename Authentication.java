@@ -58,3 +58,16 @@ public class Authentication {
         return false;
     }
 
+       public boolean checkOrganizerPermission(int organizerId, int communityID) throws SQLException {
+        String sql = "SELECT c.id FROM users u JOIN communities c ON u.club_id = c.id " +
+                "WHERE u.id = ? AND c.name = ? AND u.role = 'event organizer'";
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, organizerId);
+            stmt.setInt(2, communityID);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // Returns true if the organizer has permission
+        }
+    }
+}
+
