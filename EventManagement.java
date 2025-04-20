@@ -62,5 +62,19 @@ public class EventManagement {
         }
         return null;
     }
+  
+
+  // Method to RSVP for an event
+  public void rsvpEvent(int eventId, int userId, boolean attending) throws SQLException {
+        String sql = "INSERT INTO event_attendees (event_id, user_id, attending) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE attending = ?";
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, eventId);
+            stmt.setInt(2, userId);
+            stmt.setBoolean(3, attending);
+            stmt.setBoolean(4, attending);
+            stmt.executeUpdate();
+        }
+    }
 }
 
