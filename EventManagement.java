@@ -115,5 +115,23 @@ public class EventManagement {
 
         return events;
     }
+
+  // Method to add an event (only for event organizers)
+  public void addEvent(Event event, int organizerId) throws SQLException {
+        String sql = "INSERT INTO events (name, description, venue, event_date, event_time, community_nid, members_only, organizer_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, event.getName());
+            stmt.setString(2, event.getDescription());
+            stmt.setString(3, event.getVenue());
+            stmt.setDate(4, event.getDate());
+            stmt.setTime(5, event.getTime());
+            stmt.setInt(6, event.getCommunityId());
+            stmt.setBoolean(7, event.isMembersOnly());
+            stmt.setInt(8, organizerId);
+            stmt.executeUpdate();
+        }
+    }
 }
 
