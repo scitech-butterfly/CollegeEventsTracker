@@ -23,5 +23,38 @@ public class Event {
     this.communityID = communityID;
     this.membersOnly = membersOnly;
   }
+
+  // Getters and setters
+  public int getEventId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public Date getDate() {
+    return date;
+  }
+
+  public Time getTime() {
+    return time;
+  }
+
+  public String getVenue() {
+    return venue;
+  }
+
+  public int getCommunityId() {
+    return communityID;
+  }
+
+  public boolean isMembersOnly() {
+    return membersOnly;
+  }
 }
 
