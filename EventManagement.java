@@ -40,5 +40,27 @@ public class EventManagement {
 
         return events;
     }
+
+  // Method to search event by name
+  public Event getEventByName(String eventName) throws SQLException {
+        String sql = "SELECT * FROM events WHERE name = ?";
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, eventName);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Event(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getString("venue"),
+                        rs.getDate("event_date"),
+                        rs.getTime("event_time"),
+                        rs.getInt("community_nid"),
+                        rs.getBoolean("members_only"));
+            }
+        }
+        return null;
+    }
 }
 
