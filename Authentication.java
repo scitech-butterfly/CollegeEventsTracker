@@ -1,1 +1,25 @@
+import db.Database;
+import java.sql.*;
 
+public class Authentication {
+    public User authenticate(String username, String password) throws SQLException {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String role = rs.getString("role");
+                int id = rs.getInt("id");
+                if ("student".equals(role)) {
+                    return new Student(id, username, password);
+                } else if ("club member".equals(role)) {
+                    return new ClubMember(id, username, password, rs.getInt("club_id"));
+                } else if ("event organizer".equals(role)) {
+                    return new EventOrganizer(id, username, password, rs.getInt("club_id"));
+                }
+            }
+        }
+        return null;
+    }
