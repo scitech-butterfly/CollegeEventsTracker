@@ -76,5 +76,44 @@ public class EventManagement {
             stmt.executeUpdate();
         }
     }
+
+  // Method to view the events user registered for
+  public List<Event> getRegisteredEventsForUser(int userId) throws SQLException {
+        List<Event> events = new ArrayList<>();
+        String sql = "SELECT e.* FROM events e " +
+                "INNER JOIN event_attendees ea ON e.id = ea.event_id " +
+                "WHERE ea.user_id = ? AND e.event_date >= ?";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            LocalDate currentDate = LocalDate.now();
+            Date sqlCurrentDate = Date.valueOf(currentDate);
+
+            stmt.setInt(1, userId);
+            stmt.setDate(2, sqlCurrentDate);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Event event = new Event(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getString("venue"),
+                        rs.getDate("event_date"),
+                        rs.getTime("event_time"),
+                        rs.getInt("community_nid"),
+                        rs.getBoolean("members_only")
+                );
+                events.add(event);
+            }
+        }
+
+        if (events.isEmpty()) {
+            System.out.println("No upcoming events registered.");
+        }
+
+        return events;
+    }
 }
 
