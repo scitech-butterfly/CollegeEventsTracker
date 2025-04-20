@@ -18,6 +18,11 @@ public class Community {
         return name;
     }
 
+    public String getType() {
+        return type;
+    }
+}
+
     
 
     
