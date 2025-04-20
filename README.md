@@ -3,7 +3,7 @@
 This module is part of a **College Events Tracker System**, which helps in managing different types of college communities such as **Clubs** and **Departments**. It provides the base architecture for community-related features such as adding members and organizing events.
 
 
-## 🧠 Class Overview
+## Class Overview
 
 ### 1. `Community` (Abstract)
 The base class for all community types (e.g., Club, Department).
