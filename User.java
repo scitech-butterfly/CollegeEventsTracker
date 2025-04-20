@@ -20,5 +20,12 @@ public abstract class User {
         System.out.println("User: " + name + " (" + email + ")");
         System.out.println("Role: " + role);
     }
+  public int getUserId() {
+        return userId;
+    }
 
+    public String getRole() {
+        return role;
+    }
+}
 
