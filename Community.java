@@ -9,4 +9,9 @@ public class Community {
         this.type = type;
     }
 
+    // Getters and setters
+    public int getId() {
+        return id;
+    }
+
     
