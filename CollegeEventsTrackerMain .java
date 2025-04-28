@@ -2,6 +2,9 @@ import java.util.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Scanner;
 
 public class CollegeEventsTrackerMain {
     public static void main(String[] args) {
@@ -22,7 +25,7 @@ public class CollegeEventsTrackerMain {
                         String username = scanner.nextLine();
                         System.out.print("Enter password: ");
                         String password = scanner.nextLine();
-                        System.out.print("Enter role (student/club_member/event_organizer): ");
+                        System.out.print("Enter role (student/club member/event organizer): ");
                         String role = scanner.nextLine();
 
                         // For club_member and event_organizer, ask for club ID
@@ -82,7 +85,8 @@ public class CollegeEventsTrackerMain {
             System.out.println("4. Your Upcoming Events");
             if (user.canAddEvents()) {
                 System.out.println("5. Add Event");
-            }
+                System.out.println("6. Update Event Time and Venue"); 
+                System.out.println("7. Delete Event");
             System.out.println("0. Logout");
             System.out.print("Choose an option: ");
             int choice = Integer.parseInt(scanner.nextLine());
@@ -117,7 +121,7 @@ public class CollegeEventsTrackerMain {
                     if (event != null) {
                         System.out.print("RSVP (yes/no): ");
                         String rsvp = scanner.nextLine();
-                        eventMgmt.rsvpEvent(event.getEventId(), user.getUserId(), "yes".equalsIgnoreCase(rsvp));
+                        eventMgmt.rsvpEvent(event.getEventId(), user.getUserId(), rsvp); // assuming rsvp is already "yes"/"no"
                         System.out.println("RSVP updated.");
                     } else {
                         System.out.println("Event not found.");
@@ -157,7 +161,20 @@ public class CollegeEventsTrackerMain {
                     Event newEvent = new Event(0, name, description, venue, date, time, communityID, membersOnly);
                     eventMgmt.addEvent(newEvent, user.getUserId());
                     System.out.println("Event added.");
-                } else if (choice == 0) {
+                } else if (choice == 6 && user.canAddEvents()) {
+                    // Update event time and venue
+                    updateEventTimeAndVenue(scanner, user, eventMgmt);
+                } else if (choice == 7 && user.canAddEvents()){
+                    System.out.println("Event Name: ");
+                    String name = scanner.nextLine();
+                    Event event = eventMgmt.getEventByName(name);
+                    if (event != null) {
+                        eventMgmt.deleteEvent(name);
+                        System.out.println("Event Deleted!");
+                    } else {
+                        System.out.println("Event not found.");
+                    }
+                }else if (choice == 0) {
                     System.out.println("Logging out...");
                     break;
                 } else {
@@ -170,6 +187,61 @@ public class CollegeEventsTrackerMain {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+        }
+    }
+
+    // Helper method to handle event time and venue updates
+    private static void updateEventTimeAndVenue(Scanner scanner, User user, EventManagement eventMgmt)
+            throws SQLException {
+        // First check if this user is actually an event organizer
+        if (!eventMgmt.isEventOrganizer(user.getUserId())) {
+            System.out.println("Only event organizers can update events.");
+            return;
+        }
+
+        // Get the event to update
+        System.out.println("Enter event name to update: ");
+        String eventName = scanner.nextLine();
+        Event event = eventMgmt.getEventByName(eventName);
+
+        if (event == null) {
+            System.out.println("Event not found.");
+            return;
+        }
+
+        // Show current event details
+        System.out.println("Current event details:");
+        System.out.println("Name: " + event.getName());
+        System.out.println("Date: " + event.getDate());
+        System.out.println("Time: " + event.getTime());
+        System.out.println("Venue: " + event.getVenue());
+
+        // Get new details
+        try {
+            System.out.print("New event date (YYYY-MM-DD) or press Enter to keep current: ");
+            String dateInput = scanner.nextLine();
+            Date newDate = dateInput.isEmpty() ? event.getDate() : Date.valueOf(dateInput);
+
+            System.out.print("New event time (HH:MM:SS) or press Enter to keep current: ");
+            String timeInput = scanner.nextLine();
+            Time newTime = timeInput.isEmpty() ? event.getTime() : Time.valueOf(timeInput);
+
+            System.out.print("New venue or press Enter to keep current: ");
+            String venueInput = scanner.nextLine();
+            String newVenue = venueInput.isEmpty() ? event.getVenue() : venueInput;
+
+            // Attempt to update the event
+            boolean updated = eventMgmt.updateEventTimeAndVenue(event.getEventId(), user.getUserId(), newDate, newTime,
+                    newVenue);
+
+            if (updated) {
+                System.out.println("Event updated successfully!");
+            } else {
+                System.out.println("Failed to update event. You may not have permission to update this event.");
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid date or time format. Please use YYYY-MM-DD and HH:MM:SS.");
         }
     }
 }
