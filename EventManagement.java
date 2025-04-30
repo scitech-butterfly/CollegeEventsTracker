@@ -180,5 +180,16 @@ public class EventManagement {
             throw e;
         }
     }
+
+    // Helper method to check if a user is an event organizer
+    public boolean isEventOrganizer(int userId) throws SQLException {
+        String sql = "SELECT role FROM users WHERE id = ? AND role = 'event organizer'";
+        try (Connection conn = Database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // Returns true if user is an event organizer
+        }
+    }
 }
 
