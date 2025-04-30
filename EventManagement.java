@@ -133,5 +133,52 @@ public class EventManagement {
             stmt.executeUpdate();
         }
     }
+
+    // Method to update event time and venue
+    public boolean updateEventTimeAndVenue(int eventId, int organizerId, Date newDate, Time newTime, String newVenue)
+            throws SQLException {
+        // Check if the user is an event organizer for this event
+        String authCheckSql = "SELECT e.id FROM events e WHERE e.id = ? AND e.organizer_id = ?";
+
+        try (Connection conn = Database.getConnection();
+                PreparedStatement authStmt = conn.prepareStatement(authCheckSql)) {
+
+            authStmt.setInt(1, eventId);
+            authStmt.setInt(2, organizerId);
+            ResultSet authRs = authStmt.executeQuery();
+
+            if (!authRs.next()) {
+                // User is not authorized to update this event
+                System.out.println("You don't have permission to update this event.");
+                return false;
+            }
+
+            // User is authorized, proceed with update
+            String updateSql = "UPDATE events SET event_date = ?, event_time = ?, venue = ? WHERE id = ?";
+
+            try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
+                updateStmt.setDate(1, newDate);
+                updateStmt.setTime(2, newTime);
+                updateStmt.setString(3, newVenue);
+                updateStmt.setInt(4, eventId);
+
+                int rowsAffected = updateStmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Event time and venue updated successfully!");
+
+                    // Optional: Notify registered attendees about the change
+                    notifyAttendeesAboutUpdate(eventId, conn);
+
+                    return true;
+                } else {
+                    System.out.println("Failed to update event. Event may not exist.");
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error updating event time and venue: " + e.getMessage());
+            throw e;
+        }
+    }
 }
 
