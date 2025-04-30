@@ -191,5 +191,32 @@ public class EventManagement {
             return rs.next(); // Returns true if user is an event organizer
         }
     }
+
+    // Method to delete event
+    public void deleteEvent(String eventName) throws SQLException {
+        String deleteAttendees = "DELETE FROM event_attendees WHERE event_id = (select id from events where name = ?)";
+        String deleteEvent = "DELETE FROM events WHERE name = ?";
+
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false); // transactional safety
+
+            try (PreparedStatement stmt1 = conn.prepareStatement(deleteAttendees);
+                    PreparedStatement stmt2 = conn.prepareStatement(deleteEvent)) {
+
+                stmt1.setString(1, eventName);
+                stmt1.executeUpdate();
+
+                stmt2.setString(1, eventName);
+                stmt2.executeUpdate();
+
+                conn.commit(); // only commit if both succeed
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        }
+    }
 }
 
